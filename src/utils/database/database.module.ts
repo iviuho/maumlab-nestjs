@@ -1,5 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Answer } from 'src/entities/answer.entity';
+import { Choice } from 'src/entities/choice.entity';
+import { Question } from 'src/entities/question.entity';
+import { Survey } from 'src/entities/survey.entity';
 
 @Module({
   imports: [
@@ -10,7 +14,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: 'root',
       password: 'root',
       database: 'test',
-      entities: [],
+      entities: [Survey, Question, Choice, Answer],
       synchronize: true,
     }),
   ],
