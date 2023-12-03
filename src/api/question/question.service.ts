@@ -1,26 +1,47 @@
 import { Injectable } from '@nestjs/common';
 import { CreateQuestionInput } from './dto/create-question.input';
 import { UpdateQuestionInput } from './dto/update-question.input';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Question } from 'src/entities/question.entity';
+import { Repository } from 'typeorm';
+import { ChoiceService } from '../choice/choice.service';
 
 @Injectable()
 export class QuestionService {
-  create(createQuestionInput: CreateQuestionInput) {
-    return 'This action adds a new question';
+  constructor(
+    @InjectRepository(Question)
+    private readonly questionRepository: Repository<Question>,
+    private readonly choiceService: ChoiceService,
+  ) {}
+
+  async create(createQuestionInput: CreateQuestionInput) {
+    const question = this.questionRepository.create(createQuestionInput);
+    question.choices = await Promise.all(
+      createQuestionInput.choices.map((c) => this.choiceService.create(c)),
+    );
+
+    return this.questionRepository.save(question);
   }
 
   findAll() {
-    return `This action returns all question`;
+    return this.questionRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} question`;
+    return this.questionRepository.findOneByOrFail({ id });
   }
 
-  update(id: number, updateQuestionInput: UpdateQuestionInput) {
-    return `This action updates a #${id} question`;
+  async update(id: number, updateQuestionInput: UpdateQuestionInput) {
+    const question = await this.questionRepository.findOneByOrFail({ id });
+    return this.questionRepository.save({
+      ...question,
+      ...updateQuestionInput,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} question`;
+  async remove(id: number) {
+    const question = await this.questionRepository.findOneByOrFail({ id });
+    await this.questionRepository.delete(id);
+    return question;
   }
 }

@@ -1,26 +1,39 @@
 import { Injectable } from '@nestjs/common';
 import { CreateChoiceInput } from './dto/create-choice.input';
 import { UpdateChoiceInput } from './dto/update-choice.input';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Choice } from 'src/entities/choice.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ChoiceService {
+  constructor(
+    @InjectRepository(Choice)
+    private readonly choiceRepository: Repository<Choice>,
+  ) {}
+
   create(createChoiceInput: CreateChoiceInput) {
-    return 'This action adds a new choice';
+    const choice = this.choiceRepository.create(createChoiceInput);
+
+    return this.choiceRepository.save(choice);
   }
 
   findAll() {
-    return `This action returns all choice`;
+    return this.choiceRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} choice`;
+    return this.choiceRepository.findOneByOrFail({ id });
   }
 
-  update(id: number, updateChoiceInput: UpdateChoiceInput) {
-    return `This action updates a #${id} choice`;
+  async update(id: number, updateChoiceInput: UpdateChoiceInput) {
+    const choice = await this.choiceRepository.findOneByOrFail({ id });
+    return this.choiceRepository.save({ ...choice, ...updateChoiceInput });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} choice`;
+  async remove(id: number) {
+    const choice = await this.choiceRepository.findOneByOrFail({ id });
+    await this.choiceRepository.delete(id);
+    return choice;
   }
 }

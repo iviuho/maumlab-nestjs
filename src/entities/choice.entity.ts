@@ -9,7 +9,9 @@ export class Choice {
   @Field(() => Int)
   id: number;
 
-  @ManyToOne(() => Question, (question) => question.choices)
+  @ManyToOne(() => Question, (question) => question.choices, {
+    onDelete: 'CASCADE',
+  })
   @Field(() => Question)
   question: Question;
 

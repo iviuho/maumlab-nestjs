@@ -15,7 +15,7 @@ export class ChoiceResolver {
     return this.choiceService.create(createChoiceInput);
   }
 
-  @Query(() => [Choice], { name: 'choice' })
+  @Query(() => [Choice], { name: 'choices' })
   findAll() {
     return this.choiceService.findAll();
   }

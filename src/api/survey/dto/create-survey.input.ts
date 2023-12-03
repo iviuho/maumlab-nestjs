@@ -1,7 +1,18 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
+import { InputType, Field } from '@nestjs/graphql';
+import { CreateQuestionInput } from 'src/api/question/dto/create-question.input';
+import { Question } from 'src/entities/question.entity';
 
 @InputType()
 export class CreateSurveyInput {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+  @Field()
+  title: string;
+
+  @Field()
+  description: string;
+
+  @Field({ nullable: true })
+  extraMessage?: string;
+
+  @Field(() => [CreateQuestionInput])
+  question: Question[];
 }

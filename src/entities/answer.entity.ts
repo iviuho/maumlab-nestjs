@@ -21,11 +21,11 @@ export class Answer {
   @Field()
   createdAt: Date;
 
-  @ManyToOne(() => Survey)
+  @ManyToOne(() => Survey, { eager: true })
   @Field(() => Survey)
   survey: Survey;
 
-  @ManyToMany(() => Choice)
+  @ManyToMany(() => Choice, { eager: true })
   @JoinTable()
   @Field(() => [Choice])
   choices: Choice[];

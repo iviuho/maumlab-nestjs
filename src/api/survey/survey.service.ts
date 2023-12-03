@@ -1,26 +1,44 @@
 import { Injectable } from '@nestjs/common';
 import { CreateSurveyInput } from './dto/create-survey.input';
 import { UpdateSurveyInput } from './dto/update-survey.input';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Survey } from 'src/entities/survey.entity';
+import { Repository } from 'typeorm';
+import { QuestionService } from '../question/question.service';
 
 @Injectable()
 export class SurveyService {
-  create(createSurveyInput: CreateSurveyInput) {
-    return 'This action adds a new survey';
+  constructor(
+    @InjectRepository(Survey)
+    private readonly surveyRepository: Repository<Survey>,
+    private readonly questionService: QuestionService,
+  ) {}
+
+  async create(createSurveyInput: CreateSurveyInput) {
+    const survey = this.surveyRepository.create(createSurveyInput);
+    survey.questions = await Promise.all(
+      createSurveyInput.question.map((q) => this.questionService.create(q)),
+    );
+
+    return this.surveyRepository.save(survey);
   }
 
   findAll() {
-    return `This action returns all survey`;
+    return this.surveyRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} survey`;
+    return this.surveyRepository.findOneByOrFail({ id });
   }
 
-  update(id: number, updateSurveyInput: UpdateSurveyInput) {
-    return `This action updates a #${id} survey`;
+  async update(id: number, updateSurveyInput: UpdateSurveyInput) {
+    const survey = await this.surveyRepository.findOneByOrFail({ id });
+    return this.surveyRepository.save({ ...survey, ...updateSurveyInput });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} survey`;
+  async remove(id: number) {
+    const survey = await this.surveyRepository.findOneByOrFail({ id });
+    await this.surveyRepository.delete(id);
+    return survey;
   }
 }

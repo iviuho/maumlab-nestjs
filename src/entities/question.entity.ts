@@ -16,7 +16,9 @@ export class Question {
   @Field(() => Int)
   id: number;
 
-  @ManyToOne(() => Survey, (survey) => survey.questions)
+  @ManyToOne(() => Survey, (survey) => survey.questions, {
+    onDelete: 'CASCADE',
+  })
   @Field(() => Survey)
   survey: Survey;
 
@@ -24,7 +26,10 @@ export class Question {
   @Field()
   content: string;
 
-  @OneToMany(() => Choice, (choice) => choice.question)
+  @OneToMany(() => Choice, (choice) => choice.question, {
+    cascade: true,
+    eager: true,
+  })
   @Field(() => [Choice])
   choices: Choice[];
 }

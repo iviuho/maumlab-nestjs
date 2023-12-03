@@ -21,7 +21,10 @@ export class Survey {
   @Field({ nullable: true })
   extraMessage?: string;
 
-  @OneToMany(() => Question, (question) => question.survey)
+  @OneToMany(() => Question, (question) => question.survey, {
+    cascade: true,
+    eager: true,
+  })
   @Field(() => [Question])
   questions: Question[];
 }

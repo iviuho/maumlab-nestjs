@@ -1,7 +1,12 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
+import { InputType, Field, ID } from '@nestjs/graphql';
+import { Choice } from 'src/entities/choice.entity';
+import { Survey } from 'src/entities/survey.entity';
 
 @InputType()
 export class CreateAnswerInput {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+  @Field(() => ID)
+  survey: Survey;
+
+  @Field(() => [ID])
+  choices: Choice[];
 }
