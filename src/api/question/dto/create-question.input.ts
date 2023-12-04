@@ -1,6 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
 import { CreateChoiceInput } from 'src/api/choice/dto/create-choice.input';
-import { Choice } from 'src/entities/choice.entity';
 
 @InputType()
 export class CreateQuestionInput {
@@ -8,5 +7,5 @@ export class CreateQuestionInput {
   content: string;
 
   @Field(() => [CreateChoiceInput])
-  choices: Choice[];
+  choices: CreateChoiceInput[];
 }
