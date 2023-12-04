@@ -17,7 +17,7 @@ export class ChoiceResolver {
 
   @Query(() => [Choice], { name: 'choices' })
   findAll() {
-    return this.choiceService.findAll();
+    return this.choiceService.findAll({});
   }
 
   @Query(() => Choice, { name: 'choice' })

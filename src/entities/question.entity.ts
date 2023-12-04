@@ -7,13 +7,13 @@ import {
 } from 'typeorm';
 import { Survey } from './survey.entity';
 import { Choice } from './choice.entity';
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 @Entity()
 @ObjectType()
 export class Question {
   @PrimaryGeneratedColumn()
-  @Field(() => Int)
+  @Field(() => ID)
   id: number;
 
   @ManyToOne(() => Survey, (survey) => survey.questions, {
@@ -26,10 +26,7 @@ export class Question {
   @Field()
   content: string;
 
-  @OneToMany(() => Choice, (choice) => choice.question, {
-    cascade: true,
-    eager: true,
-  })
+  @OneToMany(() => Choice, (choice) => choice.question, { cascade: true })
   @Field(() => [Choice])
   choices: Choice[];
 }

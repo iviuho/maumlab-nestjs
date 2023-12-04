@@ -1,12 +1,12 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Question } from './question.entity';
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 @Entity()
 @ObjectType()
 export class Survey {
   @PrimaryGeneratedColumn()
-  @Field(() => Int)
+  @Field(() => ID)
   id: number;
 
   @Column()
@@ -21,10 +21,7 @@ export class Survey {
   @Field({ nullable: true })
   extraMessage?: string;
 
-  @OneToMany(() => Question, (question) => question.survey, {
-    cascade: true,
-    eager: true,
-  })
+  @OneToMany(() => Question, (question) => question.survey, { cascade: true })
   @Field(() => [Question])
   questions: Question[];
 }

@@ -3,7 +3,7 @@ import { CreateQuestionInput } from './dto/create-question.input';
 import { UpdateQuestionInput } from './dto/update-question.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Question } from 'src/entities/question.entity';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { ChoiceService } from '../choice/choice.service';
 
 @Injectable()
@@ -23,8 +23,8 @@ export class QuestionService {
     return this.questionRepository.save(question);
   }
 
-  findAll() {
-    return this.questionRepository.find();
+  findAll(condition: FindOptionsWhere<Question>) {
+    return this.questionRepository.findBy(condition);
   }
 
   findOne(id: number) {
