@@ -24,11 +24,17 @@ export class QuestionService {
   }
 
   findAll(condition: FindOptionsWhere<Question>) {
-    return this.questionRepository.findBy(condition);
+    return this.questionRepository.find({
+      relations: { choices: true, survey: true },
+      where: condition,
+    });
   }
 
   findOne(id: number) {
-    return this.questionRepository.findOneByOrFail({ id });
+    return this.questionRepository.findOne({
+      relations: { choices: true, survey: true },
+      where: { id },
+    });
   }
 
   async update(id: number, updateQuestionInput: UpdateQuestionInput) {

@@ -1,12 +1,12 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Question } from './question.entity';
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ID, ObjectType } from '@nestjs/graphql';
 
 @Entity()
 @ObjectType()
 export class Choice {
   @PrimaryGeneratedColumn()
-  @Field(() => Int)
+  @Field(() => ID)
   id: number;
 
   @ManyToOne(() => Question, (question) => question.choices, {
@@ -20,6 +20,6 @@ export class Choice {
   content: string;
 
   @Column()
-  @Field()
+  @Field(() => Float)
   point: number;
 }

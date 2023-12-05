@@ -24,11 +24,17 @@ export class SurveyService {
   }
 
   findAll(condition: FindOptionsWhere<Survey>) {
-    return this.surveyRepository.findBy(condition);
+    return this.surveyRepository.find({
+      relations: { questions: true },
+      where: condition,
+    });
   }
 
   findOne(id: number) {
-    return this.surveyRepository.findOneByOrFail({ id });
+    return this.surveyRepository.findOne({
+      relations: { questions: true },
+      where: { id },
+    });
   }
 
   async update(id: number, updateSurveyInput: UpdateSurveyInput) {

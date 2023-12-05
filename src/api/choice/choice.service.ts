@@ -19,11 +19,17 @@ export class ChoiceService {
   }
 
   findAll(condition: FindOptionsWhere<Choice>) {
-    return this.choiceRepository.findBy(condition);
+    return this.choiceRepository.find({
+      relations: { question: true },
+      where: condition,
+    });
   }
 
   findOne(id: number) {
-    return this.choiceRepository.findOneByOrFail({ id });
+    return this.choiceRepository.findOne({
+      relations: { question: true },
+      where: { id },
+    });
   }
 
   async update(id: number, updateChoiceInput: UpdateChoiceInput) {

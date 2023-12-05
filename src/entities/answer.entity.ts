@@ -8,24 +8,24 @@ import {
 } from 'typeorm';
 import { Survey } from './survey.entity';
 import { Choice } from './choice.entity';
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 @Entity()
 @ObjectType()
 export class Answer {
   @PrimaryGeneratedColumn()
-  @Field(() => Int)
+  @Field(() => ID)
   id: number;
 
   @CreateDateColumn()
   @Field()
   createdAt: Date;
 
-  @ManyToOne(() => Survey, { eager: true })
+  @ManyToOne(() => Survey)
   @Field(() => Survey)
   survey: Survey;
 
-  @ManyToMany(() => Choice, { eager: true })
+  @ManyToMany(() => Choice)
   @JoinTable()
   @Field(() => [Choice])
   choices: Choice[];

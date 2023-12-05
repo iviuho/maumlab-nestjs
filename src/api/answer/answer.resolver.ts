@@ -17,7 +17,7 @@ export class AnswerResolver {
 
   @Query(() => [Answer], { name: 'answers' })
   findAll() {
-    return this.answerService.findAll();
+    return this.answerService.findAll({});
   }
 
   @Query(() => Answer, { name: 'answer' })

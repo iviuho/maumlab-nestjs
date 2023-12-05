@@ -1,30 +1,12 @@
-import {
-  Resolver,
-  Query,
-  Mutation,
-  Args,
-  Int,
-  ResolveField,
-  Parent,
-} from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { QuestionService } from './question.service';
 import { CreateQuestionInput } from './dto/create-question.input';
 import { UpdateQuestionInput } from './dto/update-question.input';
 import { Question } from 'src/entities/question.entity';
-import { ChoiceService } from '../choice/choice.service';
 
 @Resolver(() => Question)
 export class QuestionResolver {
-  constructor(
-    private readonly questionService: QuestionService,
-    private readonly choiceService: ChoiceService,
-  ) {}
-
-  @ResolveField()
-  choices(@Parent() question: Question) {
-    const { id } = question;
-    return this.choiceService.findAll({ question: { id } });
-  }
+  constructor(private readonly questionService: QuestionService) {}
 
   @Mutation(() => Question)
   createQuestion(
